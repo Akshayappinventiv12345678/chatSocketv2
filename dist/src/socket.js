@@ -8,6 +8,7 @@ const http_1 = require("http");
 const socket_io_1 = require("socket.io");
 // import { Kafka } from "kafkajs";
 const dotenv_1 = __importDefault(require("dotenv"));
+const databasesync_1 = require("./databasesync");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const server = (0, http_1.createServer)(app);
@@ -44,6 +45,7 @@ io.on("connection", (socket) => {
         try {
             console.log(" sharing recieved", newMessage);
             io.to(room).emit("receiveMessage", newMessage);
+            await (0, databasesync_1.publishData)(newMessage, room);
         }
         catch (error) {
             console.error("Error sending message to Kafka:", error);

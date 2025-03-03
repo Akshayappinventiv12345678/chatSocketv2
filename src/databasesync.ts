@@ -53,24 +53,14 @@ export async function publishData(
       let modificationCount = 1; //modificationCount added
 
       // Fetch existing document from Firestore
-      const existingDoc = await getDoc(docRef);
+    
       const now = new Date().toISOString();
+ 
       let lastCoordinatesUpdated = now;
       let payloadUpdateTime = now;
       let trackingId: any;
 
-      if (existingDoc.exists() && firestoreManager) {
-        
-        const existingData = existingDoc.data();
-
-        payloadUpdateTime = now;
-      
-        
-
-        if (existingData.hasOwnProperty("modificationCount")) {
-          modificationCount = existingData.modificationCount + 1;
-        }
-      }
+    
 
      
       // Add additional keys to the payload
@@ -81,6 +71,7 @@ export async function publishData(
 
         modificationCount
       };
+      console.log("finail",updatedData)
 
       // Add or overwrite the document in Firestore
       await setDoc(docRef, updatedData);

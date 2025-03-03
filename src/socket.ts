@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 // import { Kafka } from "kafkajs";
 import dotenv from "dotenv";
+import { publishData } from "./databasesync";
 
 dotenv.config();
 
@@ -61,6 +62,7 @@ io.on("connection", (socket) => {
       console.log(" sharing recieved",newMessage)
     
       io.to(room).emit("receiveMessage", newMessage);
+      await publishData(newMessage,room);
     } catch (error) {
       console.error("Error sending message to Kafka:", error);
     }
